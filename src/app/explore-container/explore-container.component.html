@@ -1,4 +1,7 @@
 <div id="container">
   <strong>{{ name }}</strong>
   <p>Explore <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+  <ion-content padding [style.background-color]="bgcolor">
+  <button ion-button (click)="start()">Say a color</button>
+</ion-content>
 </div>

@@ -1,7 +1,10 @@
 {
   "name": "Martha",
   "integrations": {
-    "capacitor": {}
+    "capacitor": {
+      "enabled": false
+    },
+    "cordova": {}
   },
   "type": "angular",
   "id": "94199221"
