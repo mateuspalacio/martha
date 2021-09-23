@@ -1,6 +1,11 @@
+import { Observable } from 'rxjs';
+import { Recipient } from './../../models/recipient';
+import { Sender } from './../../models/sender';
+import { AssistService } from './../../assist.service';
 import { ChangeDetectorRef, Component, Input } from '@angular/core';
 import { SpeechRecognition } from '@ionic-native/speech-recognition/ngx';
 import { NavController, Platform } from '@ionic/angular';
+import { TextToSpeech } from '@ionic-native/text-to-speech/ngx';
 //import { SpeechRecognition } from '@ionic-native/speech-recognition';
 
 @Component({
@@ -15,8 +20,11 @@ export class Tab1Page {
   preferredLanguage = 'pt-BR'
   speechRecognized: string
   zone: any;
-  
-  constructor(public navCtrl: NavController, private plt: Platform, private speechRecognition: SpeechRecognition, private cd: ChangeDetectorRef) { 
+  message = {} as Sender;
+  response = {} as Recipient;
+  resp$ = {} as Observable<Recipient>;
+  constructor(public navCtrl: NavController, private plt: Platform, private speechRecognition: SpeechRecognition, private cd: ChangeDetectorRef, 
+    private assist: AssistService, private tts: TextToSpeech) { 
   }
   ngOnInit() {
 
@@ -29,6 +37,16 @@ export class Tab1Page {
     this.speechRecognition.startListening().subscribe(matches => {
       this.matches = matches;
       this.cd.detectChanges();
+      this.message = {
+          sender: "TabletTotem",
+          text: matches[0]
+      }
+      this.resp$ = this.assist.sendUserInput(this.message);
+      this.resp$.subscribe(data => this.response = data);
+      this.tts.speak(this.response.text);
+      // .subscribe(data => {
+      //     this.response = data as Recipient;
+      // })
     });
     this.isRecording = true;
   }
