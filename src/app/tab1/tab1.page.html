@@ -1,25 +1,27 @@
 <ion-header [translucent]="true">
-  <ion-toolbar [color]="isRecording? 'danger' : 'primary'">
-    <ion-title>
-      Talk to me
-    </ion-title>
-  </ion-toolbar>
+    <ion-toolbar [color]="isRecording? 'danger' : 'primary'">
+        <ion-title>
+            Talk to me
+        </ion-title>
+    </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 1</ion-title>
-    </ion-toolbar>
-  </ion-header>
-<button ion-button full (click)="getPermissions()">Get Permission</button>
-<button ion-button full (click)="startListening()">Start Listening</button>
-<button ion-button full (click)="stopListening()" *ngIf="isIos()">Stop Listening</button>
-<ion-card>
-<ion-card-header>Eu entendi...</ion-card-header>
-<ion-card-content>
-<ion-list><ion-item *ngFor="let match of matches">{{match}}</ion-item> </ion-list>
-</ion-card-content>
-</ion-card>
-  <app-explore-container name="Tab 1 page"></app-explore-container>
+    <ion-header collapse="condense">
+        <ion-toolbar>
+            <ion-title size="large">Tab 1</ion-title>
+        </ion-toolbar>
+    </ion-header>
+    <button ion-button full (click)="getPermissions()">Get Permission</button>
+    <button ion-button full (click)="startListening()">Start Listening</button>
+    <button ion-button full (click)="stopListening()" *ngIf="isIos()">Stop Listening</button>
+    <ion-card>
+        <ion-card-header></ion-card-header>
+        <ion-card-content>
+            <ion-list>
+                <ion-item *ngIf="resp$| async">{{response.text}}</ion-item>
+            </ion-list>
+        </ion-card-content>
+    </ion-card>
+    <app-explore-container name="Tab 1 page"></app-explore-container>
 </ion-content>
