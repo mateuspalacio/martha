@@ -21,8 +21,8 @@ export class Tab1Page {
   speechRecognized: string
   zone: any;
   message = {} as Sender;
-  response = {} as Recipient;
-  resp$ = {} as Observable<Recipient>;
+  response: Array<Recipient> = [];
+  resp$ = {} as Observable<Array<Recipient>>;
   constructor(public navCtrl: NavController, private plt: Platform, private speechRecognition: SpeechRecognition, private cd: ChangeDetectorRef, 
     private assist: AssistService, private tts: TextToSpeech) { 
   }
@@ -42,8 +42,12 @@ export class Tab1Page {
           text: matches[0]
       }
       this.resp$ = this.assist.sendUserInput(this.message);
-      this.resp$.subscribe(data => this.response = data);
-      this.tts.speak(this.response.text);
+      this.resp$.subscribe(data => {
+        this.response = data
+        console.log("recebido", data)
+        console.log("variavel local", this.response[0])
+      });
+      this.tts.speak(this.response[0].text);
       // .subscribe(data => {
       //     this.response = data as Recipient;
       // })

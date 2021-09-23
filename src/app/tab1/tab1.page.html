@@ -19,7 +19,8 @@
         <ion-card-header></ion-card-header>
         <ion-card-content>
             <ion-list>
-                <ion-item *ngIf="resp$| async">{{response.text}}</ion-item>
+                {{response}}
+                <ion-item *ngIf="resp$| async">{{response[0].text}}</ion-item>
             </ion-list>
         </ion-card-content>
     </ion-card>
