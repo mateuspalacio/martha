@@ -12,9 +12,9 @@ export class AssistService {
 
   constructor(public http: HttpClient) { }
 
-  sendUserInput(message: Sender): Observable<any>{
+  sendUserInput(message: Sender): Observable<Recipient>{
 
-      var resp = this.http.post(this.API_URL + 'messages/', message) // aqui então é pro endpoint http://143.198.161.108:8000/messages/
+      var resp = this.http.post<Recipient>(this.API_URL + 'messages/', message) // aqui então é pro endpoint http://143.198.161.108:8000/messages/
       return resp;
   }
 }
