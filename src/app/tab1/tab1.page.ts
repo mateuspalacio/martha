@@ -27,8 +27,6 @@ export class Tab1Page {
     private assist: AssistService, private tts: TextToSpeech) { 
   }
   ngOnInit() {
-
-
   }
   startListening(){
     let options = {
