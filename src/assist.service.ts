@@ -20,7 +20,10 @@ export class AssistService {
   constructor(public http: HttpClient) { }
 
   sendUserInput(message: Sender): Observable<Array<Recipient>>{
-      var resp = this.http.post<Array<Recipient>>(this.API_URL + 'messages/', message, httpOptions); // aqui então é pro endpoint http://143.198.161.108:8000/messages/
-      return resp;
+    return this.http.post<Array<Recipient>>(this.API_URL + 'messages/', message, httpOptions); // aqui então é pro endpoint http://143.198.161.108:8000/messages/
+  }
+
+  restartSession(sender: string): Observable<Array<Recipient>>{
+    return this.sendUserInput({ sender, text: '/restart' })
   }
 }

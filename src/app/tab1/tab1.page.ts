@@ -8,13 +8,14 @@ import { NavController, Platform } from '@ionic/angular';
 import { TextToSpeech } from '@ionic-native/text-to-speech/ngx';
 //import { SpeechRecognition } from '@ionic-native/speech-recognition';
 
+const SENDER = 'TabletTotem'
+
 @Component({
   selector: 'app-tab1',
   templateUrl: 'tab1.page.html',
   styleUrls: ['tab1.page.scss']
 })
 export class Tab1Page {
-
   matches: String[];
   isRecording = false;
   preferredLanguage = 'pt-BR'
@@ -32,22 +33,31 @@ export class Tab1Page {
     let options = {
       language: 'pt-BR'
     }
-    this.speechRecognition.startListening().subscribe(matches => {
+
+    this.speechRecognition.startListening(options).subscribe(matches => {
       this.matches = matches;
       this.cd.detectChanges();
       this.message = {
-          sender: "TabletTotem",
+          sender: SENDER,
           text: matches[0]
       }
+
       this.resp$ = this.assist.sendUserInput(this.message);
       this.resp$.subscribe(data => {
-        this.response = data
+        this.response = data;
         console.log("recebido", data);
+        
+        const text = this.response.map(res => res.text).join(' ');
+        
+        // REMOVER DEPOIS...
+        this.response[0].text = 'Resposta: ' + this.response[0].text;
 
         this.tts.speak({ 
-          text: this.response[0].text,
+          text,
           locale: 'pt-BR',
         });
+
+        this.cd.detectChanges();
       });
       // .subscribe(data => {
       //     this.response = data as Recipient;
@@ -66,6 +76,19 @@ export class Tab1Page {
         this.speechRecognition.requestPermission();
       }
     })
+  }
+  restartSession() {
+    this.resp$ = this.assist.restartSession(SENDER);
+    this.resp$.subscribe(data => {
+      console.log('[INFO] Restarted...');
+      console.log(data);
+    
+      this.matches = [];
+      this.response = [];
+
+      this.cd.detectChanges();
+    });
+
   }
   isIos(){
     return this.plt.is('ios');

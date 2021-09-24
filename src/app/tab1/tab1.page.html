@@ -19,10 +19,24 @@
         <ion-card-header></ion-card-header>
         <ion-card-content>
             <ion-list>
-                <pre>{{ response | json }}</pre>
-                <ion-item *ngIf="resp$| async">{{response[0].text}}</ion-item>
+                <ion-item *ngIf="matches?.length > 0">Entendi: {{ matches[0] }}</ion-item>
+                <div *ngIf="response?.length > 0">
+                    <ion-item *ngFor="let res of response">
+                        {{ res.text }}
+                    </ion-item>
+                </div>
             </ion-list>
         </ion-card-content>
     </ion-card>
-    <app-explore-container name="Tab 1 page"></app-explore-container>
+
+    <ion-row [ngStyle]="{'position': 'fixed', 'left': 0, 'bottom': '20px'}">
+        <ion-col style="text-align: left">
+            <ion-button size="large" color="tertiary" (click)="startListening()">Speak</ion-button>
+        </ion-col>
+        <ion-col style="text-align: right">
+            <ion-button size="large" color="tertiary" (click)="restartSession()">Restart</ion-button>
+        </ion-col>
+    </ion-row>
+
+    <!-- <app-explore-container name="Tab 1 page"></app-explore-container> -->
 </ion-content>
