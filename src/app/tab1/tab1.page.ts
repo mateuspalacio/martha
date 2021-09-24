@@ -42,10 +42,13 @@ export class Tab1Page {
       this.resp$ = this.assist.sendUserInput(this.message);
       this.resp$.subscribe(data => {
         this.response = data
-        console.log("recebido", data)
-        console.log("variavel local", this.response[0])
+        console.log("recebido", data);
+
+        this.tts.speak({ 
+          text: this.response[0].text,
+          locale: 'pt-BR',
+        });
       });
-      this.tts.speak(this.response[0].text);
       // .subscribe(data => {
       //     this.response = data as Recipient;
       // })
