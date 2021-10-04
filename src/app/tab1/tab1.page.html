@@ -22,12 +22,21 @@
                 <ion-item *ngIf="matches?.length > 0">Entendi: {{ matches[0] }}</ion-item>
                 <div *ngIf="response?.length > 0">
                     <ion-item *ngFor="let res of response">
-                        {{ res.text }}
+                        {{ full_response }}
                     </ion-item>
                 </div>
             </ion-list>
         </ion-card-content>
     </ion-card>
+
+    <!-- <ion-row>
+        <ion-col> -->
+            <ion-item>
+                <ion-label>Áudio Polly (AWS)</ion-label>
+                <ion-toggle [(ngModel)]="use_native_audio" slot="start" name="Áudio Polly" color="tertiary"></ion-toggle>
+            </ion-item>
+        <!-- </ion-col>
+    </ion-row> -->
 
     <ion-row [ngStyle]="{'position': 'fixed', 'left': 0, 'bottom': '20px'}">
         <ion-col style="text-align: left">
