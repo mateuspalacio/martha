@@ -18,7 +18,9 @@ const SENDER = 'TabletTotem'
   styleUrls: ['tab1.page.scss']
 })
 export class Tab1Page {
+  interval: any;
   matches: String[];
+  inConversation = false;
   isRecording = false;
   use_native_audio = true;
   preferredLanguage = 'pt-BR'
@@ -29,8 +31,8 @@ export class Tab1Page {
   response: Array<Recipient> = [];
   resp$ = {} as Observable<Array<Recipient>>;
 
-  constructor(public navCtrl: NavController, private plt: Platform, private speechRecognition: SpeechRecognition, private cd: ChangeDetectorRef, 
-    private assist: AssistService, private tts: TextToSpeech, private nativeAudio: NativeAudio) { 
+  constructor(public navCtrl: NavController, private plt: Platform, private speechRecognition: SpeechRecognition, private cd: ChangeDetectorRef,
+    private assist: AssistService, private tts: TextToSpeech, private nativeAudio: NativeAudio) {
   }
   ngOnInit() {
     this.nativeAudio.preloadSimple('0e6279a37d4c9a4a8db5a0bda75f76a6', 'assets/audios/0e6279a37d4c9a4a8db5a0bda75f76a6.mp3');
@@ -57,19 +59,17 @@ export class Tab1Page {
     console.log('NgInit OK...')
   }
   async playSound(audioName: string) {
-    // return new Promise((resolve, reject) => {
-    //   this.nativeAudio.play(audioName, resolve).then((result) => {
-    //     resolve(result);
-    //   }).catch(err => reject(err))
-    // });
     return new Promise((resolve) => {
       this.nativeAudio.play(audioName, (success) => resolve(success));
     });
   }
-  async startListening(){
+
+  async startListening() {
     let options = {
       language: 'pt-BR'
     }
+
+    this.isRecording = true;
 
     this.speechRecognition.startListening(options).subscribe(async matches => {
       this.matches = matches;
@@ -83,7 +83,7 @@ export class Tab1Page {
       this.resp$.subscribe(async data => {
         this.response = data;
         console.log("recebido", data);
-        
+
         const text = this.response.map(res => res.text).join(' ');
 
         if (this.use_native_audio) {
@@ -92,18 +92,23 @@ export class Tab1Page {
           }
         } else {
           // COLOCAR SE QUER VIA GOOGLE OU AWS
-          this.tts.speak({ 
+          this.tts.speak({
             text,
             locale: 'pt-BR',
           });
         }
-        
+
         this.full_response = 'Resposta: ' + text
         this.cd.detectChanges();
+        this.isRecording = false;
+
+        this.startListening();
       });
+    }, (error) => {
+      console.log('error:', error);
     });
-    this.isRecording = true;
   }
+
   stopListening(){
     this.speechRecognition.stopListening().then(()=>{
       this.isRecording = false;
@@ -121,7 +126,7 @@ export class Tab1Page {
     this.resp$.subscribe(data => {
       console.log('[INFO] Restarted...');
       console.log(data);
-    
+
       this.matches = [];
       this.response = [];
 
